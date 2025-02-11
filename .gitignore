@@ -1,0 +1,5 @@
+bin/configuration-private.sh
+
+bin/warren-bank-releases-data/repo_data.json
+bin/warren-bank-releases-data/repos/
+bin/warren-bank-releases/

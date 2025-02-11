@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# -------------------------------------------------------------------- private configuration:
+
+export github_personal_access_token=''
