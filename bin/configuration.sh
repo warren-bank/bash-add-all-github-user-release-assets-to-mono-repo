@@ -25,6 +25,11 @@ export perform_download=1
 export use_utc_timestamp_in_commit_message=1
 export commit_each_repo_individually=1
 
+export bytes_to_push_per_post_chunk_over_ssh='52428800'  # 50 MiB. (1 MiB is the default.)
+export bytes_to_push_per_post_chunk_over_http='52428800' # 50 MiB. (1 MiB is the default.)
+export max_push_retries_before_exit=-1 # use any negative number for infinite retries. (I'm looking at you, gitlab.)
+export seconds_delay_between_push_retries=5
+
 export perform_git_clone=0
 export perform_git_commit=0
 export perform_git_push=0

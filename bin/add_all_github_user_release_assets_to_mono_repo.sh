@@ -180,16 +180,52 @@ exec_git_commit() {
       git add --all .
     fi
 
-    git commit -m "$commit_msg"
+    git commit -uno -m "$commit_msg"
   fi
 }
 
 # -------------------------------------------------------------------- function: push updates to remote repos:
 
 exec_git_push() {
+  repo_name="$1"
+
   if [ $perform_git_push -eq 1 ];then
+    local_sha=$(git rev-parse HEAD)
+
     for remote_name in $(git remote);do
-      git push "$remote_name" "$branch_name"
+      remote_sha=$(git rev-parse "${remote_name}/${branch_name}")
+
+      if [ "$local_sha" == "$remote_sha" ];then
+        continue
+      fi
+
+      retries=-1
+
+      while [ $max_push_retries_before_exit -lt 0 -o $retries -lt $max_push_retries_before_exit ];do
+        git push "$remote_name" "$branch_name"
+
+        if [ $? -eq 0 ];then
+          # sanity check
+          remote_sha=$(git rev-parse "${remote_name}/${branch_name}")
+
+          if [ "$local_sha" == "$remote_sha" ];then
+            break
+          fi
+        fi
+
+        retries=$((retries + 1))
+        sleep $seconds_delay_between_push_retries
+      done
+
+      if [ $max_push_retries_before_exit -ge 0 -a $retries -eq $max_push_retries_before_exit ];then
+        if [ -n "$repo_name" ];then
+          echo "Network error: unable to push '/${repo_name}' to '${remote_name}' remote."
+        else
+          echo "Network error: unable to push to '${remote_name}' remote."
+        fi
+
+        return 1
+      fi
     done
   fi
 }
@@ -198,11 +234,22 @@ exec_git_push() {
 
 cd "$mono_repo_name"
 
+if [ -n "$bytes_to_push_per_post_chunk_over_ssh" ];then
+  git config ssh.postBuffer "$bytes_to_push_per_post_chunk_over_ssh"
+fi
+if [ -n "$bytes_to_push_per_post_chunk_over_http" ];then
+  git config http.postBuffer "$bytes_to_push_per_post_chunk_over_http"
+fi
+
 if [ $commit_each_repo_individually -eq 1 ];then
   while read repo_name; do
     if [ -n "$repo_name" ];then
       exec_git_commit "$repo_name"
-      exec_git_push
+      exec_git_push   "$repo_name"
+
+      if [ ! $? -eq 0 ];then
+        exit 1
+      fi
     fi
   done <"../${repo_names}"
 else
