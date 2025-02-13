@@ -34,6 +34,19 @@ export perform_git_clone=0
 export perform_git_commit=0
 export perform_git_push=0
 
+# -------------------------------------------------------------------- large-file-storage:
+
+export PATH_7zip='/c/PortableApps/7-Zip/16.02/App/7-Zip64'
+
+export split_files_larger_than='100' # units: MB
+export size_of_split_chunks='50'     # units: MB
+
+export delete_original_files_after_split=1
+export delete_split_chunks_after_merge=1
+
+export perform_lfs_split=1
+export perform_lfs_merge=0
+
 # -------------------------------------------------------------------- private configuration:
 
 if [ -f "${DIR}/configuration-private.sh" ];then

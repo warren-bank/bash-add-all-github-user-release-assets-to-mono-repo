@@ -234,6 +234,7 @@ mirror-Android-DroidPlay
 mirror-Android-DSU-Sideloader
 mirror-Android-limbo
 mirror-Android-MPC-HC-remote-control
+mirror-Android-MultiApp
 mirror-Android-MultiApp-opensdk
 mirror-Android-RemoteAdbShell
 mirror-Android-spynet-camera
@@ -241,6 +242,7 @@ mirror-Android-VirtualXposed
 mirror-Android-waydroid
 mirror-crx-lazy-tabs
 mirror-DialogMate2
+mirror-electron-permaweb-desktop
 mirror-firmware-lightbulb-camera-Anyka-ak3918-by-Gergely-Palfi
 mirror-firmware-lightbulb-camera-Anyka-ak3918-by-Muhammed-Kalkan
 mirror-golang-chromecast

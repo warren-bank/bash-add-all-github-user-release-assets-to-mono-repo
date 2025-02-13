@@ -174,6 +174,14 @@ if [ $perform_download -eq 1 ];then
   source "$script_to_download_all_release_file_assets"
 fi
 
+if [ $perform_lfs_split -eq 1 ];then
+  source "${DIR}/large-file-storage/1-split-into-chunks.sh"
+fi
+
+if [ $perform_lfs_merge -eq 1 ];then
+  source "${DIR}/large-file-storage/2-merge-split-chunks.sh"
+fi
+
 # -------------------------------------------------------------------- function: commit local repo working tree to index:
 
 exec_git_commit() {
